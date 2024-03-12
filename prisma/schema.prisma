@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  admin    Boolean
+  password String
+  foods    Food[]
+
+  @@map("user")
+}
+
+model Food {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  price       String
+  description String?
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clients     FoodClient[]
+
+  @@map("food")
+}
+
+model Client {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  description String?
+  address     String
+  amount      String
+  status      String
+  totalPay    String
+  paid        Boolean
+  payment     String
+  userCreator String?
+  foods       FoodClient[]
+
+  @@map("client")
+}
+
+model FoodClient {
+  foodId   String
+  clientId String
+  food     Food   @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  client   Client @relation(fields: [clientId], references: [id], onDelete: SetDefault)
+
+  @@id([foodId, clientId])
+  @@map("food_client")
+}
