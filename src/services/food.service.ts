@@ -1,4 +1,5 @@
 import { prisma } from '../database/db';
+import { AppError } from '../errors/AppError.error';
 import {
    TCreateFood,
    TCreateFoodReturn,
@@ -20,6 +21,13 @@ export class FoodService {
       const food = await prisma.food.findUnique({
          where: {
             id
+         },
+         include: {
+            clients: {
+               select: {
+                  client: true
+               }
+            }
          }
       });
 
@@ -47,6 +55,29 @@ export class FoodService {
          data: body
       });
       return food;
+   };
+
+   createClientFood = async (idFood: string, idClient: string) => {
+      const existingRelation = await prisma.foodClient.findUnique({
+         where: {
+            foodId_clientId: {
+               foodId: idFood,
+               clientId: idClient
+            }
+         }
+      });
+
+      if (!existingRelation) {
+         const newRelation = await prisma.foodClient.create({
+            data: {
+               foodId: idFood,
+               clientId: idClient
+            }
+         });
+
+         return newRelation;
+      }
+      throw new AppError(422, 'the customer already belongs to the food');
    };
 
    delete = async (id: string): Promise<any> => {

@@ -18,7 +18,9 @@ export const foodClientSchema = z.object({
    clientId: z.string()
 });
 
+export const clientSchemaCreateStatus = clientSchema.pick({ status: true });
 export const clientSchemaCreate = clientSchema.omit({ id: true });
+export const clientSchemaUpdate = clientSchema.omit({ id: true }).partial();
 export const clientSchemaFind = clientSchema.extend({
    foods: foodClientSchema.pick({ foodId: true }).array()
 });

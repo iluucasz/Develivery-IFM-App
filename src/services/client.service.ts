@@ -1,5 +1,5 @@
 import { prisma } from '../database/db';
-import { TClient, TClientFind, TClientReturn } from '../interfaces/client.interface';
+import { TClient, TClientFind, TClientReturn, TClientUpdate } from '../interfaces/client.interface';
 import { clientSchema } from '../schemas/client.schema';
 
 export class ClientService {
@@ -44,10 +44,19 @@ export class ClientService {
       return client;
    };
 
-   update = async (id: string, body: any): Promise<TClient> => {
+   update = async (id: string, body: TClientUpdate): Promise<TClient> => {
       const client = await prisma.client.update({
          where: { id },
          data: body
+      });
+      return clientSchema.parse(client);
+   };
+   updateStatus = async (id: string, status: string): Promise<TClient> => {
+      const client = await prisma.client.update({
+         where: { id },
+         data: {
+            status
+         }
       });
       return clientSchema.parse(client);
    };

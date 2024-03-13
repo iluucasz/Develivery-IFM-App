@@ -9,4 +9,4 @@ export const foodSchema = z.object({
 });
 
 export const createFoodSchema = foodSchema.omit({ id: true, userId: true });
-export const updateFoodSchema = foodSchema.omit({ id: true, userId: true });
+export const updateFoodSchema = foodSchema.omit({ id: true });

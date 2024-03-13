@@ -31,6 +31,12 @@ export class ClientController {
       const update = await this.clientService.update(params, body);
       return response.status(201).json({ message: update });
    };
+   updateStatus = async (request: Request, response: Response): Promise<Response> => {
+      const params = String(request.params.id);
+      const body = request.body;
+      const update = await this.clientService.update(params, body);
+      return response.status(201).json({ message: update });
+   };
 
    delete = async (request: Request, response: Response): Promise<Response> => {
       const params = String(request.params.id);

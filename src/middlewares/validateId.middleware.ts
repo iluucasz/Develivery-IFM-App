@@ -3,25 +3,35 @@ import { prisma } from '../database/db';
 import { AppError } from '../errors/AppError.error';
 
 export class ValidateId {
-   static opportunity = async (request: Request, response: Response, next: NextFunction) => {
-      const id = Number(request.params.id);
+   static user = async (request: Request, response: Response, next: NextFunction) => {
+      const id = request.params.id;
 
-      const opportunity = await prisma.opportunity.findUnique({ where: { id } });
+      const user = await prisma.user.findUnique({ where: { id } });
 
-      if (!opportunity || !id) {
-         throw new AppError(404, 'Opportunity not found');
+      if (!user || !id) {
+         throw new AppError(404, 'User not found');
       }
 
       next();
    };
+   static food = async (request: Request, response: Response, next: NextFunction) => {
+      const id = request.params.id;
 
-   static application = async (request: Request, response: Response, next: NextFunction) => {
-      const id = Number(request.params.id);
+      const user = await prisma.food.findUnique({ where: { id } });
 
-      const application = await prisma.application.findUnique({ where: { id } });
+      if (!user || !id) {
+         throw new AppError(404, 'User not found');
+      }
 
-      if (!application) {
-         throw new AppError(404, 'Application not found');
+      next();
+   };
+   static client = async (request: Request, response: Response, next: NextFunction) => {
+      const id = request.params.id;
+
+      const client = await prisma.client.findUnique({ where: { id } });
+
+      if (!client || !id) {
+         throw new AppError(404, 'User not found');
       }
 
       next();

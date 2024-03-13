@@ -10,7 +10,7 @@ export const userSchema = z.object({
    foods: z.array(foodSchema)
 });
 
-export const userSchemaFindManyReturn = userSchema.omit({ password: true });
+export const userSchemaFindManyReturn = userSchema.omit({ password: true, email: true });
 export const userSchemaFindOne = userSchema.omit({ password: true });
 
 export const userSchemaCreate = userSchema.omit({ id: true, foods: true });
@@ -18,7 +18,12 @@ export const userSchemaCreateReturn = userSchema.omit({ password: true, foods: t
 
 export const userSchemaLogin = userSchema.pick({ email: true, password: true });
 
-export const userSchemaUpdate = userSchema.pick({ name: true, email: true });
+export const userSchemaUpdate = userSchema.pick({ name: true, email: true, password: true });
 export const userSchemaUpdateReturn = userSchema.pick({ id: true, name: true });
 
 export const userFindSchema = userSchema.omit({ foods: true });
+
+export const userSchemaUpdateUser = userSchema.pick({ name: true }).extend({
+   oldPassword: z.string(),
+   newPassword: z.string().optional()
+});

@@ -37,7 +37,7 @@ export class UserService {
 
       const compare = await bcrypt.compare(body.password, user.password);
 
-      if (!compare || !user) {
+      if (!compare) {
          throw new AppError(401, 'Email/Password invalid');
       }
 
@@ -78,6 +78,41 @@ export class UserService {
          data: { password: passwordHash }
       });
 
+      return userSchemaCreateReturn.parse(updatedUser);
+   };
+
+   updateUser = async (
+      id: string,
+      name: string,
+      oldPassword: string,
+      newPassword?: string
+   ): Promise<TUserCreateReturn> => {
+      const user = await prisma.user.findUnique({
+         where: { id }
+      });
+
+      if (!user) {
+         throw new AppError(404, 'User not found');
+      }
+
+      const updateData: { name: string; password?: string } = {
+         name
+      };
+
+      if (oldPassword && newPassword) {
+         const isOldPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+         if (!isOldPasswordCorrect) {
+            throw new AppError(400, 'Old Password Invalid');
+         }
+
+         const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+         updateData.password = hashedNewPassword;
+      }
+
+      const updatedUser = await prisma.user.update({
+         where: { id },
+         data: updateData
+      });
       return userSchemaCreateReturn.parse(updatedUser);
    };
 
