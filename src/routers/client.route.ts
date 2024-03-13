@@ -16,7 +16,7 @@ export const clientRouter = Router();
 clientRouter.post(
    '/:id',
    validateBody.execute(clientSchemaCreate),
-   ValidateId.client,
+   ValidateId.food,
    AuthToken.execute,
    IsAdmin.execute,
    (req, res) => {

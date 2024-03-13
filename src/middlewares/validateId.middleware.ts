@@ -20,7 +20,7 @@ export class ValidateId {
       const user = await prisma.food.findUnique({ where: { id } });
 
       if (!user || !id) {
-         throw new AppError(404, 'User not found');
+         throw new AppError(404, 'Food not found');
       }
 
       next();
@@ -31,7 +31,7 @@ export class ValidateId {
       const client = await prisma.client.findUnique({ where: { id } });
 
       if (!client || !id) {
-         throw new AppError(404, 'User not found');
+         throw new AppError(404, 'Client not found');
       }
 
       next();

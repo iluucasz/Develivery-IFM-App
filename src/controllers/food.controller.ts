@@ -27,18 +27,9 @@ export class FoodController {
 
    update = async (request: Request, response: Response) => {
       const body = request.body;
-      const params = String(request.params.id);
+      const params = request.params.id;
 
       const update = await this.foodService.update(params, body);
-      return response.status(201).json({ message: update });
-   };
-
-   createClientFood = async (request: Request, response: Response) => {
-      const foodId = request.params.id;
-      const clientId = request.body.clientId;
-      console.log(clientId, 'id');
-
-      const update = await this.foodService.createClientFood(foodId, clientId);
       return response.status(201).json({ message: update });
    };
 

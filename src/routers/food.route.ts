@@ -8,18 +8,23 @@ import { createFoodSchema, updateFoodSchema } from '../schemas/food.schema';
 import { AuthOwner } from '../middlewares/AuthOwner.middleware';
 import { IsAdmin } from '../middlewares/isAdmin.middleware';
 import { ValidateId } from '../middlewares/validateId.middleware';
+import { FoodExists } from '../middlewares/foodExists.middleware';
 
 container.registerSingleton('FoodService', FoodService);
 const foodController: FoodController = container.resolve(FoodController);
 
 export const foodRouter = Router();
 
-foodRouter.post('/', validateBody.execute(createFoodSchema), AuthToken.execute, IsAdmin.execute, (req, res) => {
-   foodController.create(req, res);
-});
-foodRouter.post('/:id/clientFood', ValidateId.food, AuthToken.execute, IsAdmin.execute, (req, res) => {
-   foodController.createClientFood(req, res);
-});
+foodRouter.post(
+   '/',
+   validateBody.execute(createFoodSchema),
+   AuthToken.execute,
+   IsAdmin.execute,
+   FoodExists.execute,
+   (req, res) => {
+      foodController.create(req, res);
+   }
+);
 foodRouter.get('/:id', ValidateId.food, AuthToken.execute, AuthOwner.food, (req, res) => {
    foodController.findOne(req, res);
 });

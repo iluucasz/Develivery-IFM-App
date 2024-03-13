@@ -8,6 +8,7 @@ import { AlreadyRegistered } from '../middlewares/alreadyRegistered.middleware';
 import { AuthToken } from '../middlewares/authToken.middleware';
 import { AuthOwner } from '../middlewares/AuthOwner.middleware';
 import { ValidateId } from '../middlewares/validateId.middleware';
+import { IsAdmin } from '../middlewares/isAdmin.middleware';
 
 container.registerSingleton('UserService', UserService);
 const userController = container.resolve(UserController);
@@ -22,7 +23,7 @@ userRouter.post('/login', validateBody.execute(userSchemaLogin), userController.
 userRouter.get('/:id', ValidateId.user, AuthToken.execute, AuthOwner.user, (req, res) => {
    userController.findOne(req, res);
 });
-userRouter.get('/', (req, res) => {
+userRouter.get('/', AuthToken.execute, IsAdmin.execute, (req, res) => {
    userController.findAll(req, res);
 });
 userRouter.patch('/', validateBody.execute(userSchemaUpdate), userController.update);

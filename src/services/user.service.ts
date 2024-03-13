@@ -99,12 +99,14 @@ export class UserService {
          name
       };
 
-      if (oldPassword && newPassword) {
+      if (oldPassword) {
          const isOldPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
          if (!isOldPasswordCorrect) {
             throw new AppError(400, 'Old Password Invalid');
          }
+      }
 
+      if (oldPassword && newPassword) {
          const hashedNewPassword = await bcrypt.hash(newPassword, 10);
          updateData.password = hashedNewPassword;
       }

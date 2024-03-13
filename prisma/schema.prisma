@@ -50,7 +50,7 @@ model FoodClient {
   foodId   String
   clientId String
   food     Food   @relation(fields: [foodId], references: [id], onDelete: Cascade)
-  client   Client @relation(fields: [clientId], references: [id], onDelete: SetDefault)
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
   @@id([foodId, clientId])
   @@map("food_client")
