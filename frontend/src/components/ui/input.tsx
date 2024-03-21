@@ -1,25 +1,22 @@
-import * as React from "react"
+import React, { forwardRef } from "react";
 
-import { cn } from "@/lib/utils"
+interface InputProps {
+  error?: { message: string };
+  className?: string
+  label: string
+  placeHolder?: string
+}
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+// eslint-disable-next-line react/display-name
+export const Input = forwardRef<HTMLInputElement, InputProps>(({ error, className = '', label, placeHolder, ...rest }, ref) => {
+  const defaultClass = 'flex min-h-[60px] w-full rounded-md border border-input bg-gray-300 px-3 py-2 text-lg shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50';
+  const inputClass = `${defaultClass} ${className}`;
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
-    return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Input.displayName = "Input"
-
-export { Input }
+  return (
+    <div className="flex flex-col items-center justify-center gap-4">
+      <label htmlFor="id" className="text-lg font-medium">{label}</label>
+      <input {...rest} ref={ref} className={inputClass} id="id" placeholder={placeHolder} />
+      {error && <span className="w-full">{error.message}</span>}
+    </div>
+  );
+});
