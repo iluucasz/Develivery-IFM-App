@@ -1,5 +1,11 @@
+import Dashboard from "@/components/dashboard";
+import { Header } from "@/components/header";
+
 export default function Home() {
   return (
-    <div>Delivery IFM App</div>
+    <>
+      <Header />
+      <Dashboard />
+    </>
   );
 }
